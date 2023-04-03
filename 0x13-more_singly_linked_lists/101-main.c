@@ -1,38 +1,33 @@
 #include <stdlib.h>
-#include <string.h>
 #include <stdio.h>
 #include "lists.h"
-
 /**
- * main - check the code
- *
- * Return: Always 0.
+ * print_listint_safe - print list
+ * @head: head node
+ * Return: amount of nodes in list
  */
-int main(void)
+size_t print_listint_safe(const listint_t *head)
 {
-    listint_t *head;
-    listint_t *head2;
-    listint_t *node;
+	int size = 0, i;
+	const listint_t *tmp[100];
 
-    head2 = NULL;
-    add_nodeint(&head2, 0);
-    add_nodeint(&head2, 1);
-    add_nodeint(&head2, 2);
-    add_nodeint(&head2, 3);
-    add_nodeint(&head2, 4);
-    add_nodeint(&head2, 98);
-    add_nodeint(&head2, 402);
-    add_nodeint(&head2, 1024);
-    print_listint_safe(head2);
-    head = NULL;
-    node = add_nodeint(&head, 0);
-    add_nodeint(&head, 1);
-    add_nodeint(&head, 2);
-    add_nodeint(&head, 3);
-    add_nodeint(&head, 4);
-    node->next = add_nodeint(&head, 98);
-    add_nodeint(&head, 402);
-    add_nodeint(&head, 1024);
-    print_listint_safe(head);
-    return (0);
+	if (!head)
+		exit(98);
+
+	while (head)
+	{
+		for (i = 0; i < size; i++)
+		{
+			if (tmp[i] == head)
+			{
+				printf("-> [%p] %d\n", (void *)head, head->n);
+				return (size);
+			}
+		}
+		printf("[%p] %d\n", (void *)head, head->n);
+		tmp[size] = head;
+		size++;
+		head = head->next;
+	}
+	return (size);
 }
