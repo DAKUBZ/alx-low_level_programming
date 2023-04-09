@@ -1,35 +1,62 @@
+#include <unistd.h>
+#include <stdlib.h>
+#include <fcntl.h>
 #include "main.h"
+
 /**
- * append_text_to_file - append text to a file
- *
- * @filename: name of file to append to
- * @text_content: content to be appended to file
- *
- * Return: 1 on success; -1 on failure
+ * append_text_to_file - apends text to file
+ * @filename: path to file
+ * @text_content: content
+ * Return: 1 or -1
  */
 int append_text_to_file(const char *filename, char *text_content)
 {
-	FILE *file;
-	int success = 1;
+	int fd;
+	ssize_t w;
+	int size;
 
-	if (filename == NULL)
+	if (!filename)
+		return (-1);
+
+	fd = open(filename, O_WRONLY | O_APPEND);
+
+	if (fd == -1)
+		return (-1);
+
+	if (!text_content)
 	{
+		close(fd);
+		return (1);
+	}
+
+	size = _strlen(text_content);
+	w = write(fd, text_content, size);
+
+	if (w == -1)
+	{
+		close(fd);
 		return (-1);
 	}
-	file = fopen(filename, "a");
-	if (file == NULL)
+	close(fd);
+	return (1);
+}
+
+/**
+ * _strlen - len
+ *
+ * @s: is a pointer to a char
+ *
+ * Return: Always 0.
+ */
+
+int _strlen(const char *s)
+{
+	int i = 0;
+
+	while (*(s + i) != '\0')
 	{
-		return (-1);
+		i++;
 	}
-	if (text_content == NULL)
-	{
-		fclose(file);
-		return (success);
-	}
-	if (fprintf(file, "%s", text_content) < 0)
-	{
-		success = (-1);
-	}
-	fclose(file);
-	return (success);
+
+	return (i);
 }
