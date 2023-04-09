@@ -1,69 +1,42 @@
-#include <unistd.h>
-#include <stdlib.h>
-#include <fcntl.h>
 #include "main.h"
-
 /**
- * create_file - append to file
- * @filename: path to file
- * @text_content: content
- * Return: chars read
+ * create_file - create a specified file with filename (filename)
+ *
+ * @filename:the name of the file that has to be created
+ * @text_content: contents of a file
+ *
+ * Return: 1 on success; -1 on any failure
  */
-
 int create_file(const char *filename, char *text_content)
 {
-	int fd;
-	ssize_t w;
-	int size;
-	char *mem;
+	int length;
+	int open_ret_val;
+	int write_ret_val;
 
-	if (!filename)
-	{
+	if (filename == NULL)
 		return (-1);
-	}
-	fd = open(filename, O_RDWR | O_CREAT | O_TRUNC, 0600);
-	if (fd == -1)
-		return (-1);
-	if (!text_content)
+	if (text_content == NULL)
 	{
-		close(fd);
+		open_ret_val = open(filename, O_CREAT, 0600);
+
+		if (open_ret_val == -1)
+			return (-1);
+
+		close(open_ret_val);
 		return (1);
 	}
-	size = _strlen(text_content);
-	mem = malloc(sizeof(char) * size);
-	if (!mem)
-	{
-		close(fd);
+
+	length = strlen(text_content);
+	open_ret_val = open(filename, O_TRUNC | O_RDWR | O_CREAT, 0600);
+
+	if (open_ret_val == -1)
 		return (-1);
-	}
-	w = write(fd, text_content, size);
-	if (w == -1)
-	{
-		close(fd);
-		free(mem);
+
+	write_ret_val = write(open_ret_val, text_content, length);
+
+	if (write_ret_val == -1)
 		return (-1);
-	}
-	close(fd);
-	free(mem);
+
+	close(open_ret_val);
 	return (1);
-}
-
-/**
- * _strlen - len
- *
- * @s: is a pointer to a char
- *
- * Return: Always 0.
- */
-
-int _strlen(const char *s)
-{
-	int i = 0;
-
-	while (*(s + i) != '\0')
-	{
-		i++;
-	}
-
-	return (i);
 }
