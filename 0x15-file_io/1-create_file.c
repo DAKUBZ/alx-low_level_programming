@@ -1,9 +1,10 @@
 #include "main.h"
+
 /**
  * create_file - create a specified file with filename (filename)
  *
- * @filename:the name of the file that has to be created
- * @text_content: contents of a file
+ * @filename: name of file to be created
+ * @text_content: contents of file
  *
  * Return: 1 on success; -1 on any failure
  */
